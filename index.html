@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>颜色歌 · REARMED</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:linear-gradient(180deg,#fff7e6,#eafaf1);color:#333;min-height:100vh;padding:16px;}
+.wrap{max-width:880px;margin:0 auto;}
+header{text-align:center;margin-bottom:18px;}
+header img{width:140px;height:140px;object-fit:cover;border-radius:24px;box-shadow:0 8px 20px rgba(0,0,0,.15);}
+header h1{font-size:30px;margin:10px 0 4px;color:#e8590c;}
+header p{color:#666;font-size:15px;}
+.player{background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 4px 12px rgba(0,0,0,.08);margin:16px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.player button{background:#e8590c;color:#fff;border:none;border-radius:12px;padding:10px 18px;font-size:16px;cursor:pointer;white-space:nowrap;}
+.player audio{flex:1;min-width:200px;}
+.section-title{font-size:20px;margin:22px 0 10px;color:#2d6a4f;border-left:6px solid #52b788;padding-left:10px;}
+.lyrics{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+.lyric{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 10px rgba(0,0,0,.08);}
+.lyric img{width:100%;height:150px;object-fit:cover;display:block;}
+.lyric p{padding:10px 12px;font-size:17px;text-align:center;font-weight:600;}
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px;}
+.word{border:none;border-radius:14px;padding:16px 8px;font-size:19px;font-weight:700;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.12);transition:transform .1s;}
+.word:active{transform:scale(.94);}
+.preview{margin:16px 0;text-align:center;}
+.preview img{width:100%;max-width:420px;max-height:300px;object-fit:contain;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.15);background:#fff;}
+.preview span{display:block;margin-top:8px;color:#888;font-size:14px;}
+footer{text-align:center;color:#999;font-size:13px;margin:26px 0 8px;}
+.tip{background:#fff8e1;border-radius:12px;padding:10px 14px;color:#8a6d00;font-size:13px;margin:10px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="assets/yan.png" alt="颜色歌">
+    <h1>颜色歌</h1>
+    <p>二年级上册 · 语文园地四 · 我的发现 ｜ REARMED 互动课堂</p>
+  </header>
+
+  <div class="player">
+    <button onclick="document.getElementById('song').play()">播放歌曲</button>
+    <audio id="song" src="assets/yansege.mp3" controls preload="none"></audio>
+  </div>
+
+  <h2 class="section-title">听一听 · 颜色歌</h2>
+  <div class="lyrics" id="lyrics"></div>
+
+  <h2 class="section-title">学生字 · 点一点听发音</h2>
+  <div class="tip">提示：生字发音使用浏览器自带语音合成，部分设备需安装中文嗓音才能出声；图片与歌曲均为本地文件，无需联网。</div>
+  <div class="preview">
+    <img id="preview" src="assets/yan.png" alt="预览">
+    <span id="previewText">点下面的生字，听一听、看一看</span>
+  </div>
+  <div class="words" id="words"></div>
+
+  <footer>REARMED 项目 · 纯本地离线运行，无需联网 · 适用于课堂与家庭学习</footer>
+</div>
+<script>
+const lyrics=[
+ {t:'白色雪白好清新，', img:'assets/1-bai.png'},
+ {t:'米白奶白亮晶晶。', img:'assets/2-mi.png'},
+ {t:'红色火红照人明，', img:'assets/3-hong.png'},
+ {t:'桃红枣红笑盈盈。', img:'assets/4-tao.png'},
+ {t:'黄色土黄亮晶晶，', img:'assets/5-huang.png'},
+ {t:'鹅黄金黄放光明。', img:'assets/6-e.png'},
+ {t:'绿色草绿满园青，', img:'assets/7-lv.png'},
+ {t:'翠绿墨绿护森林。', img:'assets/8-cui.png'}
+];
+const cards=[
+ {w:'白色', c:'#ffffff', t:'#333', img:'assets/1-bai.png'},
+ {w:'雪白', c:'#eef6ff', t:'#333', img:'assets/1-bai.png'},
+ {w:'米白', c:'#f3ecd9', t:'#5b4a2e', img:'assets/2-mi.png'},
+ {w:'奶白', c:'#fdf6e3', t:'#5b4a2e', img:'assets/2-mi.png'},
+ {w:'红色', c:'#ff4d4f', t:'#fff', img:'assets/3-hong.png'},
+ {w:'火红', c:'#e63946', t:'#fff', img:'assets/3-hong.png'},
+ {w:'桃红', c:'#ff8fa3', t:'#fff', img:'assets/4-tao.png'},
+ {w:'枣红', c:'#9b2226', t:'#fff', img:'assets/4-tao.png'},
+ {w:'黄色', c:'#ffd400', t:'#5b4a2e', img:'assets/5-huang.png'},
+ {w:'土黄', c:'#c9a227', t:'#fff', img:'assets/5-huang.png'},
+ {w:'鹅黄', c:'#ffe066', t:'#5b4a2e', img:'assets/6-e.png'},
+ {w:'金黄', c:'#ffc400', t:'#5b4a2e', img:'assets/6-e.png'},
+ {w:'绿色', c:'#52b788', t:'#fff', img:'assets/7-lv.png'},
+ {w:'草绿', c:'#2d6a4f', t:'#fff', img:'assets/7-lv.png'},
+ {w:'翠绿', c:'#06d6a0', t:'#fff', img:'assets/8-cui.png'},
+ {w:'墨绿', c:'#1b4332', t:'#fff', img:'assets/8-cui.png'}
+];
+const ly=document.getElementById('lyrics');
+lyrics.forEach(l=>{const d=document.createElement('div');d.className='lyric';d.innerHTML='<img src="'+l.img+'" alt=""><p>'+l.t+'</p>';ly.appendChild(d);});
+const wd=document.getElementById('words');
+const prev=document.getElementById('preview');
+const prevT=document.getElementById('previewText');
+function speak(t){if(!('speechSynthesis'in window))return;const u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=0.8;speechSynthesis.cancel();speechSynthesis.speak(u);}
+cards.forEach(c=>{const b=document.createElement('button');b.className='word';b.style.background=c.c;b.style.color=c.t;b.textContent=c.w;b.onclick=()=>{prev.src=c.img;prevT.textContent='「'+c.w+'」';speak(c.w);};wd.appendChild(b);});
+</script>
+</body>
+</html>
